@@ -39,7 +39,7 @@ FIREla is part of the firela open source ecosystem, all built on the principle o
 ┌─────────────────┐      ┌─────────────────┐
 │   billclaw      │      │   FIREla        │
 │   Data Import   │      │   Account Mgmt  │
-│   (OpenClaw)    │      │   (Flutter)     │
+│   (CLI...)      │      │   (Flutter)     │
 └────────┬────────┘      └────────┬────────┘
          │  You hold the          │
          │  access tokens         │
