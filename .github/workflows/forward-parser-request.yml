@@ -26,8 +26,8 @@ jobs:
           # Forward issue to IGN repository via repository_dispatch
           # The IGN workflow will handle validation, PII detection, and AI generation
           
-          # Escape issue body for JSON
-          ISSUE_BODY_JSON=$(echo "$ISSUE_BODY" | jq -Rs .)
+          # Base64 encode the issue body to avoid shell escaping issues
+          ISSUE_BODY_B64=$(echo "$ISSUE_BODY" | base64 -w 0)
           
           curl -X POST \
             -H "Authorization: token $IGN_DISPATCH_TOKEN" \
@@ -38,7 +38,7 @@ jobs:
               "client_payload": {
                 "issue_number": "'$ISSUE_NUMBER'",
                 "source_repo": "fire-la/firela",
-                "issue_body": '"$ISSUE_BODY_JSON"'
+                "issue_body_b64": "'$ISSUE_BODY_B64'"
               }
             }'
 
