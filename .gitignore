@@ -35,6 +35,9 @@ build/
 *.mocks.dart
 lib/api/generated/
 
+# Hindsight local config
+.hindsight.json
+
 # System Files
 .DS_Store
 **/.DS_Store
