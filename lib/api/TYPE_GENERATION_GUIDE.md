@@ -116,7 +116,7 @@ final response = await transactionApi.createTransaction(
 
 ```bash
 # Run with local backend
-flutter run --dart-define=API_URL=http://localhost:3333/api/v1
+flutter run --dart-define=API_URL=http://localhost:3334/api/v1
 ```
 
 ### Production
