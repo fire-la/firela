@@ -59,6 +59,7 @@ jobs:
         run: dart analyze lib/api/generated/
 
       - name: Create PR if changed
+        id: create-pr
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -70,6 +71,12 @@ jobs:
             Auto-regenerated Dart API types from OpenAPI spec.
 
             **Trigger:** ign@${{ github.event.client_payload.sha }}
+
+      - name: Enable auto-merge
+        if: steps.create-pr.outputs.pull-request-operation == 'created' || steps.create-pr.outputs.pull-request-operation == 'updated'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --squash "${{ steps.create-pr.outputs.pull-request-url }}"
 
       - name: Report failure
         if: failure()
