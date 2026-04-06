@@ -1,0 +1,85 @@
+name: Regenerate API Types
+
+on:
+  repository_dispatch:
+    types: [api-types-updated]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout firela-app
+        uses: actions/checkout@v4
+
+      # Java required by openapi_generator (JAR-based tool)
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.2.0'
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: dart pub get
+
+      # Download spec from firela-app's own main branch (where spec-publish-sync.yml pushed it)
+      - name: Download latest spec
+        run: |
+          curl -sL -o openapi.yaml \
+            https://raw.githubusercontent.com/fire-la/firela-app/main/lib/api/spec/openapi.yaml
+
+      # Update build.yaml to eliminate deprecated api-specs fallback URL
+      - name: Update build.yaml URL
+        run: |
+          sed -i 's|https://raw.githubusercontent.com/fire-la/api-specs/main/openapi.yaml|https://raw.githubusercontent.com/fire-la/firela-app/main/lib/api/spec/openapi.yaml|g' build.yaml
+
+      - name: Generate types
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Verify compilation
+        run: dart analyze lib/api/generated/
+
+      - name: Create PR if changed
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: sync/api-types
+          title: "chore: regenerate Dart API types from OpenAPI spec"
+          commit-message: "chore: regenerate Dart API types from OpenAPI spec + update build.yaml URL"
+          labels: automated, api-types
+          body: |
+            Auto-regenerated Dart API types from OpenAPI spec.
+
+            **Trigger:** ign@${{ github.event.client_payload.sha }}
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: 'fire-la',
+              repo: 'firela-app',
+              title: `API type regeneration failed: ${context.sha}`,
+              body: `Regeneration triggered by ign@${{ github.event.client_payload.sha }}.\n\n[View run](${context.serverUrl}/${context.repository.full_name}/actions/runs/${context.runId})`,
+              labels: ['api-types-failure']
+            })
