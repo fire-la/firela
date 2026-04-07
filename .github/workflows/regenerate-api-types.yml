@@ -1,6 +1,11 @@
 name: Regenerate API Types
 
 on:
+  # Triggered when spec-publish-sync.yml's PR auto-merges to main
+  push:
+    branches: [main]
+    paths:
+      - 'lib/api/spec/openapi.yaml'
   repository_dispatch:
     types: [api-types-updated]
   workflow_dispatch:
@@ -41,11 +46,17 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      # Download spec from firela-app's own main branch (where spec-publish-sync.yml pushed it)
-      - name: Download latest spec
+      # Use local spec file if available (push trigger), otherwise download from main
+      - name: Prepare spec file
         run: |
-          curl -sL -o openapi.yaml \
-            https://raw.githubusercontent.com/fire-la/firela-app/main/lib/api/spec/openapi.yaml
+          if [ -f lib/api/spec/openapi.yaml ]; then
+            echo "Using local spec file (push trigger)"
+            cp lib/api/spec/openapi.yaml openapi.yaml
+          else
+            echo "Downloading spec from main branch (dispatch trigger)"
+            curl -sL -o openapi.yaml \
+              https://raw.githubusercontent.com/fire-la/firela-app/main/lib/api/spec/openapi.yaml
+          fi
 
       # Update build.yaml to eliminate deprecated api-specs fallback URL
       - name: Update build.yaml URL
