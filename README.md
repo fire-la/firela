@@ -38,27 +38,22 @@ FIREla extends this philosophy to mobile: **manage your Beancount accounts on yo
 FIREla is part of the firela open source ecosystem, all built on the principle of **data sovereignty**:
 
 ```
-┌─────────────────┐      ┌─────────────────┐
-│   billclaw      │      │   FIREla        │
-│   Data Import   │      │   Account Mgmt  │
-│   (CLI...)      │      │   (Flutter)     │
-└────────┬────────┘      └────────┬────────┘
-         │  You hold the          │
-         │  access tokens         │
-         │                        │
-         └───────────┬────────────┘
-                     ▼
-         ┌─────────────────────┐
-         │  FIREla server      │
-         │                     │
-         │  Your data,         │
-         │  your control       │
-         └─────────────────────┘
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│  firela-connect │  │   FIREla        │  │   firela-vlt    │  │   firela-relay  │
+│  Data Import    │  │   Account Mgmt  │  │   Beancount     │  │   Open Banking  │
+│  (billclaw)     │  │   (Flutter)     │  │   Ledger Store  │  │   Relay Service │
+└────────┬────────┘  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+         │  You hold the          │                    │                    │
+         │  access tokens         │                    │                    │
+         └───────────┬────────────┘                    │                    │
+                     ▼                                 ▼                    ▼
+                     ─────────────── Your data, your control ───────────────
 ```
 
-- **billclaw**: Import your financial data (Plaid, Gmail) - **you hold the API keys**
+- **firela-connect** (billclaw): Import your financial data - **you hold the API keys**
 - **FIREla**: Manage accounts on mobile - **you hold the account credentials**
-- **FIREla server**: Backend for data processing - **your data remains yours**
+- **firela-vlt**: Beancount ledger store for transaction data - **your ledger, your rules**
+- **firela-relay**: Open banking relay service - **your connections, your control**
 
 ## Why Data Sovereignty Matters
 
