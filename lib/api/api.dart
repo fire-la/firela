@@ -5,8 +5,8 @@
 library;
 
 import 'package:dio/dio.dart';
-import 'api_client.dart';
-import 'region_types.dart';
+import 'src/api_client.dart';
+import 'src/region_types.dart';
 
 /// API Error type alias
 typedef IgnApiException = DioException;

@@ -10,9 +10,9 @@ The firela Flutter app uses **manual Dio HTTP wrappers** to communicate with the
 ┌─────────────────────────────────────────┐
 │   firela Flutter App                    │
 │                                         │
-│   api/api_client.dart  — Dio HTTP client │
-│   api/ign_api.dart     — API services   │
-│   api/region_types.dart — Region types  │
+│   api/src/api_client.dart  — Dio HTTP client │
+│   api/api.dart     — API services barrel   │
+│   api/src/region_types.dart — Region types  │
 │                                         │
 │   (No generated types currently)        │
 └─────────────────────────────────────────┘
@@ -29,9 +29,9 @@ The firela Flutter app uses **manual Dio HTTP wrappers** to communicate with the
 
 | File | Purpose |
 |------|---------|
-| `api_client.dart` | Dio HTTP client singleton with env-based URL config |
-| `ign_api.dart` | Manual API service classes (Account, Transaction, etc.) |
-| `region_types.dart` | RegionConfig and related data types |
+| `api.dart` | API service classes barrel (Account, Transaction, etc.) |
+| `src/api_client.dart` | Dio HTTP client singleton with env-based URL config |
+| `src/region_types.dart` | RegionConfig and related data types |
 
 ## Environment Configuration
 
@@ -51,8 +51,8 @@ flutter run --dart-define=API_URL=https://api.firela.com/api/v1
 
 1. Add the route to the IGN backend OpenAPI spec (`libs/api-types/openapi.yaml`)
 2. Rebuild `@firela/api-types` npm package (`npm run build` in `libs/api-types/`)
-3. Manually add the corresponding Dart method in `ign_api.dart`
-4. Define any new Dart types in `region_types.dart` or create a new types file
+3. Manually add the corresponding Dart method in `api.dart`
+4. Define any new Dart types in `src/region_types.dart` or create a new types file in `src/`
 
 ## Planned: OpenAPI Code Generation
 
