@@ -30,10 +30,11 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
         with:
-          sdk: '3.2.0'
+          flutter-version: '3.24.0'
+          channel: 'stable'
 
       - name: Cache pub packages
         uses: actions/cache@v4
@@ -44,7 +45,7 @@ jobs:
             ${{ runner.os }}-pub-
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
 
       # Use local spec file if available (push trigger), otherwise download from main
       - name: Prepare spec file
@@ -98,6 +99,6 @@ jobs:
               owner: 'fire-la',
               repo: 'firela-app',
               title: `API type regeneration failed: ${context.sha}`,
-              body: `Regeneration triggered by ign@${{ github.event.client_payload.sha }}.\n\n[View run](${context.serverUrl}/${context.repository.full_name}/actions/runs/${context.runId})`,
+              body: `Regeneration triggered by ign@${{ github.event.client_payload.sha || github.sha }}.\n\n[View run](${{ github.serverUrl }}/${{ github.repository }}/actions/runs/${{ github.runId }})`,
               labels: ['api-types-failure']
             })
