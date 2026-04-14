@@ -4,7 +4,7 @@ analyzer:
   exclude:
     - '**/*.g.dart'
     - '**/*.freezed.dart'
-    - 'lib/api/generated/**'
+    - 'lib/api/**'
   errors:
     unnecessary_import: warning
     unnecessary_null_comparison: warning
