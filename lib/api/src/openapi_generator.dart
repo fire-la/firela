@@ -20,6 +20,5 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
   inputSpec: InputSpec(path: 'lib/api/spec/openapi.yaml'),
   generatorName: Generator.dio,
   outputDirectory: 'lib/api/generated',
-  skipSpecValidation: true,
 )
 class OpenApiConfig {}
