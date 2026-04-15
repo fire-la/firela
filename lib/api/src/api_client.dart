@@ -1,9 +1,6 @@
 /// API Client Configuration for firela Flutter App
 ///
 /// Configures Dio HTTP client with authentication and base URL.
-///
-/// Note: Run `flutter pub run build_runner build` to generate types
-/// from OpenAPI spec before using this client.
 library;
 
 import 'dart:developer';

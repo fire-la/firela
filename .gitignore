@@ -39,6 +39,9 @@ build/
 # Hindsight local config
 .hindsight.json
 
+# OpenAPI Generator CLI config (local tool)
+openapitools.json
+
 # Claude Code
 CLAUDE.md
 
