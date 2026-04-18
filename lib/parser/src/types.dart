@@ -286,3 +286,6 @@ ParseFailure<T> createParseFailure<T>(
 ]) {
   return ParseFailure<T>(errors: [ParseError(type: type, message: message, context: context)]);
 }
+
+// Auto-generated supplementary types (managed by ts2dart CI pipeline)
+// export 'types_generated.dart';
