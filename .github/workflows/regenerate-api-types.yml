@@ -98,7 +98,6 @@ jobs:
       - name: Add analysis_options for generated package
         run: |
           cat > lib/api/generated/analysis_options.yaml << 'ANALYSIS'
-          include: package:lints/recommended.yaml
           analyzer:
             errors:
               unused_import: ignore
